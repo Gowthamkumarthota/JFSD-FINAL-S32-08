@@ -25,7 +25,7 @@
         <div class="nav-links">
             <button onclick="openModal('marksModal')" class="nav-button">View Marks Graph</button>
             <button onclick="openModal('attendanceModal')" class="nav-button">View Attendance Graph</button>
-        <button onclick="window.location.href='/Contactus';">Ask Doubts</button>
+        <button onclick="window.location.href='Contactus';">Ask Doubts</button>
 
             <button onclick="location.href='/'" class="nav-button">Logout</button>
         </div>

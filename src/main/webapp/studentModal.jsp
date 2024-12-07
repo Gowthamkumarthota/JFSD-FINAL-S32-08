@@ -72,7 +72,7 @@
                         <th>Student ID</th>
                         <th>Name</th>
                         <th>Email</th>
-                        <th>Action</th>
+                        
                     </tr>
                 </thead>
                 <tbody>
@@ -81,14 +81,7 @@
                             <td>${student.studentId}</td>
                             <td>${student.name}</td>
                             <td>${student.email}</td>
-                            <td>
-                                <a href="viewStudentDetails?studentId=${student.studentId}" class="btn btn-info btn-sm">
-                                    <i class="fas fa-eye"></i> View
-                                </a>
-                                <a href="editStudentDetails?studentId=${student.studentId}" class="btn btn-warning btn-sm">
-                                    <i class="fas fa-edit"></i> Edit
-                                </a>
-                            </td>
+                            
                         </tr>
                     </c:forEach>
                 </tbody>

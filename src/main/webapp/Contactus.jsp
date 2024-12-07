@@ -44,8 +44,20 @@
             background-color: #45a049;
         }
     </style>
+    <link rel="stylesheet" href="css/student.css">
 </head>
 <body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-brand">Student Portal</div>
+        <div class="nav-links">
+            <button onclick="window.location.href='/studenthome';"">View Marks Graph</button>
+            <button onclick="window.location.href='/studenthome';"">View Attendance Graph</button>
+        <button onclick="window.location.href='/Contactus';">Ask Doubts</button>
+
+            <button onclick="location.href='/'" class="nav-button">Logout</button>
+        </div>
+    </nav>
     <h2>Send an Email</h2>
     <form action="sendemail" method="post">
         <label for="name">Your Name:</label>
