@@ -34,11 +34,12 @@ public interface StudentCourseRepository extends JpaRepository<StudentCourse, In
 	                             @Param("marks") int marks);
 
 	 
-	 @Query("SELECT c.name AS course_name, sc.marks FROM StudentCourse sc JOIN Course c ON sc.courseId = c.courseId WHERE sc.studentId = ?1")
-	 List<Object[]> findStudentMarksByStudentId(int sid);
+		 @Query("SELECT c.name AS course_name, sc.marks FROM StudentCourse sc JOIN Course c ON sc.courseId = c.courseId WHERE sc.studentId = ?1")
+		 List<Object[]> findStudentMarksByStudentId(int sid);
 
 	 @Query("SELECT c.name AS course_name, sc.attendancePercentage FROM StudentCourse sc JOIN Course c ON sc.courseId = c.courseId WHERE sc.studentId = ?1")
 	 List<Object[]> findStudentAttendanceByStudentId(int sid);
+	 @Query(value = "SELECT COUNT(DISTINCT sc.student_id) FROM student_course sc JOIN courses c ON sc.course_id = c.course_id WHERE c.teacher_id = :teacherId", nativeQuery = true)
+	    int countDistinctStudentsByTeacherId(@Param("teacherId") Long teacherId);
 
-	
 }

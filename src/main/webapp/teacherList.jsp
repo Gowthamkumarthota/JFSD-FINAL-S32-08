@@ -9,7 +9,36 @@
     <title>Teacher List</title>
 </head>
 <body>
-<%@include file="adminnavbar.jsp" %>  <!-- Include the navigation bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-chalkboard-teacher me-2"></i>
+                Teacher Portal
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#uploadModal">
+                            <i class="fas fa-upload me-1"></i> Upload Mappings
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<c:url value='/studentslistfo'/>?ttid=${teacher.teacherId}">
+                            <i class="fas fa-users me-1"></i> View Students
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">
+                            <i class="fas fa-sign-out-alt me-1"></i> Logout
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav> <!-- Include the navigation bar -->
 
 &&nbps  
 <div class="container my-5 col-md-8">

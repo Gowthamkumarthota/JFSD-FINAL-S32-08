@@ -1,8 +1,18 @@
 package com.klu.prostu.controller;
 
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.klu.prostu.model.Student;
+import com.klu.prostu.model.StudentCourse;
+import com.klu.prostu.service.StudentService;
 
 
 @Controller
@@ -104,5 +114,24 @@ public class Home {
 		return mv;
 	}
 	
+    @Autowired
+    private StudentService studentCourseService;
+
+    @GetMapping("/studenthome")
+    public String getStudentDashboard(Model model, @SessionAttribute("student") Student student) {
+        // Get the student's course data
+    	Optional<Student>  studentCourses = studentCourseService.findByStudentId(student.getStudentId());
+
+        model.addAttribute("studentCourses", studentCourses);
+        return "studenthome";
+    }
+    
+    @GetMapping("/Contactus")
+	public ModelAndView Contactus() {
+		
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("/Contactus");
+		return mv;
+	}
 	
 }

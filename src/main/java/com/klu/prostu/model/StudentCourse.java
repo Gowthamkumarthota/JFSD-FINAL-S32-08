@@ -79,13 +79,14 @@ public class StudentCourse {
     private Long courseId; // Stores the course's ID as a plain field
 
     @Column(name = "attendance_percentage", nullable = true)
-    private Integer attendancePercentage;
+    private int attendancePercentage;
 
     @Column(name = "marks", nullable = true)
-    private Integer marks;
+    private int marks;
 
     @Column(name = "feedback", columnDefinition = "TEXT")
     private String feedback;
 
+    
     // Getters, setters, and constructors
 }

@@ -19,7 +19,7 @@
     
 </head>
 <body>
-    <!-- Navigation Bar -->
+    <!-- Navigation Bar 	-->
     <nav class="navbar">
         <div class="nav-brand">
             <h1>GeniusTrack</h1>

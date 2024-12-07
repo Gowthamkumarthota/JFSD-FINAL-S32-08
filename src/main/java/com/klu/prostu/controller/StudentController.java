@@ -2,14 +2,23 @@ package com.klu.prostu.controller;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -20,6 +29,7 @@ import com.klu.prostu.service.TeacherService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+
 
 import com.klu.prostu.model.Admin;
 import com.klu.prostu.model.Student;
@@ -144,28 +154,35 @@ public class StudentController {
 */
 		  
 	  @GetMapping("Studentmakrsof")
-	  public String Studentmakrsof(Model model, HttpServletRequest request) {
+	  public ResponseEntity<List<Map<String, Object>>> getStudentMarks(HttpServletRequest request) {
 	      HttpSession session = request.getSession();
 	      Student student = (Student) session.getAttribute("student");
 
 	      if (student == null) {
-	          return "redirect:/sessionexpiry"; // Redirect if the session is expired
+	          return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // Return 401 Unauthorized if session is expired
 	      }
 
-	      // Fetch the studentId from the session and the ttid from the request parameters
+	      // Fetch the studentId from the session
 	      int sid = student.getStudentId();
 
 	      // Fetch the marks and courses associated with the student
 	      List<Object[]> marksList = studentservice.getStudentMarks(sid);
 
-	      // Add marks list to the model
-	      model.addAttribute("marksList", marksList);
+	      // Convert the data to a list of maps for JSON response
+	      List<Map<String, Object>> result = new ArrayList<>();
+	      for (Object[] mark : marksList) {
+	          Map<String, Object> data = new HashMap<>();
+	          data.put("subject", mark[0]); // Assuming the first element is subject
+	          data.put("marks", mark[1]);    // Assuming the second element is marks
+	          result.add(data);
+	      }
 
-	      // Forward to the marks page to display data
-	      return "components/marks"; // Directly return the view name, not a redirect
+	      // Return the data as JSON response
+	      return ResponseEntity.ok(result);
 	  }
-
-
+	  
+	
+/*
 		@GetMapping("components/marks")
 		public ModelAndView getMethodMarks(HttpServletRequest request) {
 		    HttpSession session = request.getSession();
@@ -185,29 +202,36 @@ public class StudentController {
 		    mv.setViewName("components/marks");  // This will map to the 'marks.jsp' view
 		    return mv;
 		}
-		
-		@GetMapping("StudentAttendance")
-		public String StudentAttendance(Model model, HttpServletRequest request) {
-		    HttpSession session = request.getSession();
-		    Student student = (Student) session.getAttribute("student");
+		*/
+	  @GetMapping("StudentAttendance")
+	  public ResponseEntity<List<Map<String, Object>>> getStudentAttendance(HttpServletRequest request) {
+	      HttpSession session = request.getSession();
+	      Student student = (Student) session.getAttribute("student");
 
-		    if (student == null) {
-		        return "redirect:/sessionexpiry"; // Redirect if the session is expired
-		    }
+	      if (student == null) {
+	          return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // Return 401 Unauthorized if session is expired
+	      }
 
-		    // Fetch the studentId from the session
-		    int sid = student.getStudentId();
+	      // Fetch the studentId from the session
+	      int sid = student.getStudentId();
 
-		    // Fetch the attendance details associated with the student
-		    List<Object[]> attendanceList = studentservice.getStudentAttendance(sid);
+	      // Fetch the attendance details associated with the student
+	      List<Object[]> attendanceList = studentservice.getStudentAttendance(sid);
 
-		    // Add attendance list to the model
-		    model.addAttribute("attendanceList", attendanceList);
+	      // Convert the data to a list of maps for JSON response
+	      List<Map<String, Object>> result = new ArrayList<>();
+	      for (Object[] attendance : attendanceList) {
+	          Map<String, Object> data = new HashMap<>();
+	          data.put("subject", attendance[0]); // Assuming the first element is subject
+	          data.put("attendance", attendance[1]); // Assuming the second element is attendance percentage
+	          result.add(data);
+	      }
 
-		    // Forward to the attendance page to display data
-		    return "components/attendance"; // Directly return the view name
-		}
-		
+	      // Return the data as JSON response
+	      return ResponseEntity.ok(result);
+	  }
+
+		/*
 		@GetMapping("components/attendance")
 		public ModelAndView getMethodAttendance(HttpServletRequest request) {
 		    HttpSession session = request.getSession();
@@ -227,9 +251,52 @@ public class StudentController {
 		    mv.setViewName("components/attendance"); // This will map to the 'attendance.jsp' view
 		    return mv;
 		}
-
+*/
 
 		
+	  @Autowired
+	    private JavaMailSender mailSender;
+	  
+	  
 
+	    @PostMapping("sendemail")
+	    public ModelAndView sendEmail(HttpServletRequest request) {
+	        ModelAndView mv = new ModelAndView("studenthome");
 
-}
+	        HttpSession session = request.getSession();
+		      Student student = (Student) session.getAttribute("student");
+	        try {
+	            // Fetch data from the request
+	            String name = request.getParameter("name");
+	            String toEmail = request.getParameter("email");
+	            String subject = request.getParameter("subject");
+	            String message = request.getParameter("message");
+
+	            // Create an OTP
+	            int otp = (int) (Math.random() * 100000); // Generates a 5-digit OTP
+
+	            // Create a MIME message
+	            MimeMessage mimeMessage = mailSender.createMimeMessage();
+	            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
+
+	            // Set email details
+	            helper.setTo(toEmail);
+	            helper.setSubject(subject);
+	            helper.setFrom("s2eshwar@gmail.com"); // Replace with your email
+	            String htmlContent = "<p>Dear " + name + ",</p>" +
+	                    "<p>" + message + "</p>" +
+	                   
+	                    "<p>Regards,<br>GeniusTrack</p>";
+	            helper.setText(htmlContent, true);
+
+	            // Send the email
+	            mailSender.send(mimeMessage);
+
+	            mv.addObject("message", "Email sent successfully to " + toEmail);
+	        } catch (Exception e) {
+	            mv.addObject("message", "Error while sending email: " + e.getMessage());
+	            e.printStackTrace();
+	        }
+
+	        return mv;
+	    }}

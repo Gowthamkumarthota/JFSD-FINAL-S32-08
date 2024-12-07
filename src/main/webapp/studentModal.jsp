@@ -15,17 +15,47 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+      <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <script src="https://kit.fontawesome.com/0faddc1af8.js" crossorigin="anonymous"></script>
+    <title>Teacher Dashboard - ${teacher.name}</title>
+    <link rel="stylesheet" href="css/teacher.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <title>Student List</title>
 </head>
 <body>
 
-<%@ include file="teachernavbar.jsp" %> <!-- Include the navigation bar -->
-&&nbps<br>
-&&nbps
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-chalkboard-teacher me-2"></i>
+                Teacher Portal
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#uploadModal">
+                            <i class="fas fa-upload me-1"></i> Upload Mappings
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<c:url value='/studentslistfo'/>?ttid=${teacher.teacherId}">
+                            <i class="fas fa-users me-1"></i> View Students
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">
+                            <i class="fas fa-sign-out-alt me-1"></i> Logout
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav><!-- Include the navigation bar -->
+<br>
 <div class="container my-5 col-md-8">
     <!-- Header Section -->
     <div class="text-center mb-4">
