@@ -124,7 +124,7 @@
            <form action="checklogin" method="POST">
     <div class="form-group">
         <label for="signin-email">Email</label>
-        <input type="email" id="semail" name="semail" required>
+        <input type="text" id="semail" name="semail" required>
     </div>
     <div class="form-group">
         <label for="signin-password">Password</label>
